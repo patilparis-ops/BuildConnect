@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@import "./styles/design-system.css";
+
+@layer base {
+  * {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    background-color: #050505;
+  }
+
+  body {
+    background-color: #050505;
+    color: #fff;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Custom Overrides for T4 */
+@theme {
+  --color-brand-purple: #8b5cf6;
+  --color-brand-blue: #3b82f6;
+  --color-brand-cyan: #22d3ee;
+  --color-background: #050505;
+}

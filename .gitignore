@@ -1,4 +1,4 @@
-# Node
+﻿# Node
 node_modules/
 dist/
 coverage/
@@ -15,7 +15,7 @@ venv/
 .env
 .env.*
 
-# Generated FrameForge data
+# Generated files
 exports/
 generated_projects/
 uploads/
