@@ -59,6 +59,7 @@ export function useRegisterCustomer() {
   return useMutation({
     mutationFn: (data: any) => authApi.registerCustomer(data),
     onSuccess: (data: any) => { login(data.user as User); toast({ title: "Account created!", variant: "success" }); },
+    onError: () => toast({ title: "Registration failed", message: "Could not create account. Try again.", variant: "error" }),
   });
 }
 
@@ -67,6 +68,7 @@ export function useRegisterContractor() {
   return useMutation({
     mutationFn: (data: any) => authApi.registerContractor(data),
     onSuccess: (data: any) => { login(data.user as User); toast({ title: "Profile created!", variant: "success" }); },
+    onError: () => toast({ title: "Registration failed", message: "Could not create profile. Try again.", variant: "error" }),
   });
 }
 
@@ -92,6 +94,10 @@ export function useUpdateProject() {
 
 export function useDeleteProject() {
   return useSafeMutation({ mutationFn: projectsApi.delete, invalidateKeys: [["projects"], ["my-projects"]], successMsg: "Project deleted" });
+}
+
+export function useCompleteProject() {
+  return useSafeMutation({ mutationFn: projectsApi.complete, invalidateKeys: [["projects"], ["my-projects"]], successMsg: "Project completed! Leave a review to help others." });
 }
 
 export function useContractors(params?: { profession?: string; location?: string; minRating?: number; search?: string; page?: number; limit?: number }) {

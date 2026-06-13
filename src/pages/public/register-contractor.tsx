@@ -10,8 +10,7 @@ import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { ROUTES } from "@/constants/routes";
 import { PROFESSIONS } from "@/constants";
-import { useAuthStore } from "@/store/auth-store";
-import { toast } from "@/components/ui/toast";
+import { useRegisterContractor } from "@/hooks/use-api";
 import {
   ArrowRight,
   Eye,
@@ -43,9 +42,8 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterContractorPage() {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const registerMutation = useRegisterContractor();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [specialties, setSpecialties] = useState<string[]>([]);
   const [specialtyInput, setSpecialtyInput] = useState("");
 
@@ -80,49 +78,21 @@ export default function RegisterContractorPage() {
     setSpecialties(specialties.filter((s) => s !== item));
   };
 
-  const onSubmit = async (data: RegisterForm) => {
-    setIsLoading(true);
-    try {
-      await new Promise((r) => setTimeout(r, 1500));
-      login({
-        id: Math.random().toString(36).slice(2),
+  const onSubmit = (data: RegisterForm) => {
+    registerMutation.mutate(
+      {
         email: data.email,
-        phone: data.phone,
+        password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: "contractor",
+        phone: data.phone,
         profession: data.profession,
         specialties,
         experience: parseInt(data.experience),
-        rating: 0,
-        reviewCount: 0,
-        completedProjects: 0,
-        verified: false,
-        portfolio: [],
-        certifications: [],
-        bio: "",
-        availability: "available",
         location: data.location,
-        serviceRadius: 50,
-        createdAt: new Date().toISOString(),
-        isVerified: false,
-        avatar: undefined,
-      });
-      toast({
-        title: "Profile created!",
-        message: "Welcome to BuildConnect. Complete your profile to get started.",
-        variant: "success",
-      });
-      navigate(ROUTES.CONTRACTOR.DASHBOARD);
-    } catch {
-      toast({
-        title: "Registration failed",
-        message: "Please try again",
-        variant: "error",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      { onSuccess: () => navigate(ROUTES.CONTRACTOR.DASHBOARD) }
+    );
   };
 
   return (
@@ -271,7 +241,7 @@ export default function RegisterContractorPage() {
           <a href="#" className="text-brand-600 hover:underline">Privacy Policy</a>
         </p>
 
-        <Button type="submit" fullWidth loading={isLoading} variant="secondary">
+        <Button type="submit" fullWidth loading={registerMutation.isPending} variant="secondary">
           Create Contractor Account <ArrowRight className="h-4 w-4" />
         </Button>
       </form>

@@ -6,11 +6,11 @@ export const registerSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(50),
   lastName: z.string().min(1, "Last name is required").max(50),
   phone: z.string().optional(),
-  role: z.enum(["customer", "contractor"]),
+  role: z.enum(["customer", "contractor"]).optional(),
 });
 
 export const registerCustomerSchema = registerSchema.extend({
-  role: z.literal("customer"),
+  role: z.literal("customer").optional(),
   address: z.object({
     street: z.string().optional(),
     city: z.string().optional(),
@@ -21,7 +21,7 @@ export const registerCustomerSchema = registerSchema.extend({
 });
 
 export const registerContractorSchema = registerSchema.extend({
-  role: z.literal("contractor"),
+  role: z.literal("contractor").optional(),
   profession: z.string().min(1, "Profession is required"),
   specialties: z.array(z.string()).min(1, "At least one specialty is required"),
   experience: z.number().min(0).max(50),

@@ -7,8 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ROUTES } from "@/constants/routes";
-import { useAuthStore } from "@/store/auth-store";
-import { toast } from "@/components/ui/toast";
+import { useRegisterCustomer } from "@/hooks/use-api";
 import { ArrowRight, Eye, EyeOff, User, Mail, Phone, Lock } from "lucide-react";
 
 const registerSchema = z
@@ -29,9 +28,8 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterCustomerPage() {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const registerMutation = useRegisterCustomer();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -49,35 +47,17 @@ export default function RegisterCustomerPage() {
     },
   });
 
-  const onSubmit = async (data: RegisterForm) => {
-    setIsLoading(true);
-    try {
-      await new Promise((r) => setTimeout(r, 1500));
-      login({
-        id: Math.random().toString(36).slice(2),
+  const onSubmit = (data: RegisterForm) => {
+    registerMutation.mutate(
+      {
         email: data.email,
-        phone: data.phone,
+        password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        role: "customer",
-        createdAt: new Date().toISOString(),
-        isVerified: true,
-      });
-      toast({
-        title: "Account created!",
-        message: "Welcome to BuildConnect",
-        variant: "success",
-      });
-      navigate(ROUTES.CUSTOMER.DASHBOARD);
-    } catch {
-      toast({
-        title: "Registration failed",
-        message: "Please try again",
-        variant: "error",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+        phone: data.phone,
+      },
+      { onSuccess: () => navigate(ROUTES.CUSTOMER.DASHBOARD) }
+    );
   };
 
   return (
@@ -167,7 +147,7 @@ export default function RegisterCustomerPage() {
           </a>
         </p>
 
-        <Button type="submit" fullWidth loading={isLoading}>
+        <Button type="submit" fullWidth loading={registerMutation.isPending}>
           Create Account <ArrowRight className="h-4 w-4" />
         </Button>
       </form>

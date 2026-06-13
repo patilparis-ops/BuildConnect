@@ -103,6 +103,10 @@ export const projectsApi = {
   getMyProjects: async () => {
     return request<{ projects: any[] }>("/api/projects/customer/my");
   },
+
+  complete: async (id: string) => {
+    return request<{ success: boolean; id: string; status: string }>(`/api/projects/${id}/complete`, { method: "PATCH" });
+  },
 };
 
 // ==================== Contractors API ====================

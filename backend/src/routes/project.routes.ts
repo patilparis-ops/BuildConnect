@@ -139,6 +139,40 @@ router.put("/:id", requireAuth, requireRole("CUSTOMER"), async (req, res) => {
   }
 });
 
+// PATCH /:id/complete - Mark project as completed (customer only, must be in_progress)
+router.patch("/:id/complete", requireAuth, requireRole("CUSTOMER"), async (req, res) => {
+  try {
+    const projectId = req.params.id as string;
+    const project = await prisma.project.findUnique({ where: { id: projectId } });
+    if (!project) { res.status(404).json({ error: "Project not found" }); return; }
+
+    const customer = await prisma.customer.findUnique({ where: { userId: req.session.userId! } });
+    if (!customer || project.customerId !== customer.id) {
+      res.status(403).json({ error: "Not authorized to complete this project" }); return;
+    }
+
+    if (project.status !== "IN_PROGRESS") {
+      res.status(400).json({ error: "Only projects in progress can be marked as completed" }); return;
+    }
+
+    const now = new Date().toISOString();
+    const updated = await prisma.project.update({
+      where: { id: projectId },
+      data: { status: "COMPLETED", endDate: now },
+    });
+
+    res.json({
+      success: true,
+      id: updated.id,
+      status: updated.status.toLowerCase(),
+      endDate: now,
+    });
+  } catch (err) {
+    console.error("Complete project error:", err);
+    res.status(500).json({ error: "Failed to complete project" });
+  }
+});
+
 router.delete("/:id", requireAuth, requireRole("CUSTOMER"), async (req, res) => {
   try {
     const projectId = req.params.id as string;
