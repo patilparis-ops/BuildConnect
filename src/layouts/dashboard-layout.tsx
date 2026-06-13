@@ -1,0 +1,121 @@
+import { Outlet, Link } from "react-router-dom";
+import { cn } from "@/lib/cn";
+import { Sidebar } from "@/components/shared/sidebar";
+import { useUIStore } from "@/store/ui-store";
+import { useAuthStore } from "@/store/auth-store";
+import { Avatar } from "@/components/ui/avatar";
+import { Bell, Menu, ChevronDown, Building2 } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+export function DashboardLayout() {
+  const { sidebarOpen, setMobileMenuOpen } = useUIStore();
+  const { user, logout } = useAuthStore();
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <Sidebar />
+
+      {/* Main area */}
+      <div
+        className={cn(
+          "transition-all duration-300",
+          sidebarOpen ? "lg:ml-64" : "lg:ml-16"
+        )}
+      >
+        {/* Top bar */}
+        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+          <div className="flex items-center justify-between h-16 px-4 lg:px-6">
+            {/* Left */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="lg:hidden rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+              <Link to="/" className="lg:hidden flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-brand-800">
+                  <Building2 className="h-4 w-4 text-white" />
+                </div>
+              </Link>
+            </div>
+
+            {/* Right */}
+            <div className="flex items-center gap-3">
+              {/* Notifications */}
+              <button className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-danger-500" />
+              </button>
+
+              {/* Profile */}
+              <div className="relative">
+                <button
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-slate-100 transition-colors"
+                >
+                  <Avatar
+                    src={user?.avatar}
+                    fallback={user ? `${user.firstName[0]}${user.lastName[0]}` : "U"}
+                    size="sm"
+                  />
+                  <div className="hidden md:block text-left">
+                    <p className="text-sm font-medium text-slate-900 leading-tight">
+                      {user?.firstName} {user?.lastName}
+                    </p>
+                    <p className="text-xs text-slate-500 capitalize">{user?.role}</p>
+                  </div>
+                  <ChevronDown className="hidden md:block h-4 w-4 text-slate-400" />
+                </button>
+
+                <AnimatePresence>
+                  {profileOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setProfileOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.12 }}
+                        className="absolute right-0 top-full mt-2 z-20 w-56 rounded-xl border border-slate-200 bg-white shadow-lg"
+                      >
+                        <div className="p-1.5 space-y-0.5">
+                          <Link
+                            to={`/${user?.role}/settings`}
+                            className="block rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"
+                            onClick={() => setProfileOpen(false)}
+                          >
+                            Settings
+                          </Link>
+                          <button
+                            onClick={() => {
+                              logout();
+                              setProfileOpen(false);
+                            }}
+                            className="w-full text-left rounded-lg px-3 py-2 text-sm text-danger-600 hover:bg-danger-50"
+                          >
+                            Sign Out
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Page content */}
+        <main className="p-4 lg:p-6">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

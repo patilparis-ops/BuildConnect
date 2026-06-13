@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== User & Profile Models ====================
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String
+  firstName  String
+  lastName   String
+  phone      String?
+  role       String   // "CUSTOMER" | "CONTRACTOR" | "ADMIN"
+  avatar     String?
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  customer      Customer?
+  contractor    Contractor?
+  admin         Admin?
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model Customer {
+  id      String @id @default(cuid())
+  userId  String @unique
+  street  String?
+  city    String?
+  state   String?
+  zipCode String?
+  country String?
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projects Project[]
+  reviews  Review[]
+
+  @@map("customers")
+}
+
+model Contractor {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  profession        String
+  specialties       String[] @default([])
+  experience        Int
+  rating            Float    @default(0)
+  reviewCount       Int      @default(0)
+  completedProjects Int      @default(0)
+  verified          Boolean  @default(false)
+  bio               String?
+  hourlyRate        Float?
+  availability      String   @default("available")
+  location          String
+  serviceRadius     Int      @default(25)
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quotations     Quotation[]
+  reviews        Review[]         @relation("contractorReviews")
+  portfolioItems PortfolioItem[]
+  certifications Certification[]
+
+  @@map("contractors")
+}
+
+model Admin {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  permissions String[] @default(["all"])
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admins")
+}
+
+// ==================== Project Model ====================
+
+model Project {
+  id           String   @id @default(cuid())
+  customerId   String
+  title        String
+  description  String
+  category     String
+  status       String   @default("OPEN")
+  budgetMin    Float
+  budgetMax    Float
+  location     String
+  propertyType String?
+  propertySize Float?
+  startDate    String?
+  endDate      String?
+  images       String[] @default([])
+  requirements String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  quoteCount   Int      @default(0)
+  awardedTo    String?
+
+  customer    Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  quotations  Quotation[]
+  reviews     Review[]
+
+  @@map("projects")
+}
+
+// ==================== Quotation Model ====================
+
+model Quotation {
+  id             String   @id @default(cuid())
+  projectId      String
+  contractorId   String
+  estimatedPrice Float
+  timeline       String
+  proposal       String
+  status         String   @default("PENDING")
+  materials      Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contractor Contractor  @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, contractorId])
+  @@map("quotations")
+}
+
+// ==================== Review Model ====================
+
+model Review {
+  id           String   @id @default(cuid())
+  projectId    String
+  customerId   String
+  contractorId String
+  rating       Int
+  title        String
+  comment      String
+  images       String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  customer   Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  contractor Contractor  @relation("contractorReviews", fields: [contractorId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, customerId])
+  @@map("reviews")
+}
+
+// ==================== Portfolio & Certification Models ====================
+
+model PortfolioItem {
+  id           String  @id @default(cuid())
+  contractorId String
+  title        String
+  description  String
+  images       String[] @default([])
+  category     String
+  completedAt  String
+  location     String?
+
+  contractor Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+
+  @@map("portfolio_items")
+}
+
+model Certification {
+  id           String  @id @default(cuid())
+  contractorId String
+  name         String
+  issuer       String
+  issueDate    String
+  expiryDate   String?
+  documentUrl  String?
+  verified     Boolean @default(false)
+
+  contractor Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+
+  @@map("certifications")
+}
+
+// ==================== Notification Model ====================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
