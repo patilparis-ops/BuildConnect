@@ -27,8 +27,8 @@ const footerLinks = {
   Support: [
     { label: "Help Center", href: ROUTES.FAQ },
     { label: "Contact Support", href: ROUTES.CONTACT },
-    { label: "Terms of Service", href: "#" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Terms of Service", href: ROUTES.TERMS_OF_SERVICE },
+    { label: "Privacy Policy", href: ROUTES.PRIVACY_POLICY },
   ],
 };
 

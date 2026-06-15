@@ -216,6 +216,105 @@ async function main() {
     console.log("Created project: New House Construction");
   }
 
+  // Get contractor records for portfolio/review creation
+  const contractors = await prisma.contractor.findMany({ include: { user: true } });
+  const amit = contractors.find(c => c.user.email === "amit.verma@example.com");
+  const priyaS = contractors.find(c => c.user.email === "priya.sharma@example.com");
+  const rajesh = contractors.find(c => c.user.email === "rajesh.kumar@example.com");
+
+  // Create portfolio items
+  if (amit) {
+    await prisma.portfolioItem.createMany({
+      data: [
+        { contractorId: amit.id, title: "Luxury Villa Renovation", description: "Complete renovation of a 5,000 sq ft villa in Juhu. Included structural changes, premium flooring, and smart home integration.", category: "Renovation", completedAt: "2025-11", location: "Juhu, Mumbai" },
+        { contractorId: amit.id, title: "Green Building Project", description: "Eco-friendly residential complex with solar panels, rainwater harvesting, and sustainable materials.", category: "New Build", completedAt: "2025-08", location: "Powai, Mumbai" },
+      ],
+    });
+    console.log("Created portfolio items for Amit");
+  }
+
+  if (priyaS) {
+    await prisma.portfolioItem.createMany({
+      data: [
+        { contractorId: priyaS.id, title: "Modern Office Interior", description: "Complete interior design for a 10,000 sq ft corporate office. Open plan layout with breakout zones.", category: "Commercial", completedAt: "2026-01", location: "Gurugram" },
+        { contractorId: priyaS.id, title: "Minimalist Home Design", description: "Full home interior for a 3 BHK apartment with Scandinavian-inspired minimalist design.", category: "Residential", completedAt: "2025-09", location: "New Delhi" },
+      ],
+    });
+    console.log("Created portfolio items for Priya S");
+  }
+
+  if (rajesh) {
+    await prisma.portfolioItem.createMany({
+      data: [
+        { contractorId: rajesh.id, title: "Smart Home Wiring", description: "Complete smart home electrical installation including automation, security systems, and energy management.", category: "Electrical", completedAt: "2026-03", location: "Pune" },
+        { contractorId: rajesh.id, title: "Solar Panel Installation", description: "50kW solar panel installation for a commercial building. Grid-connected with battery backup.", category: "Solar", completedAt: "2025-07", location: "Hinjewadi, Pune" },
+      ],
+    });
+    console.log("Created portfolio items for Rajesh");
+  }
+
+  // Create quotations
+  const projects = await prisma.project.findMany();
+  if (projects.length > 0 && amit) {
+    await prisma.quotation.create({
+      data: {
+        projectId: projects[0].id,
+        contractorId: amit.id,
+        estimatedPrice: 675000,
+        timeline: "8-10 weeks",
+        proposal: "We propose a comprehensive renovation plan including premium vitrified tiles, modular kitchen from leading brands, waterproofing, and complete electrical rewiring.",
+        status: "PENDING",
+        materials: { items: ["Vitrified tiles (600x600mm)", "Modular kitchen set", "PVC flooring", "Asian paints"] },
+      },
+    });
+    console.log("Created quotation for project 1");
+  }
+
+  if (projects.length > 0 && priyaS) {
+    await prisma.quotation.create({
+      data: {
+        projectId: projects[0].id,
+        contractorId: priyaS.id,
+        estimatedPrice: 720000,
+        timeline: "10 weeks",
+        proposal: "Our design-first approach will transform your space with custom furniture, premium finishes, and expert project management.",
+        status: "PENDING",
+      },
+    });
+    console.log("Created quotation for project 1 (Priya)");
+  }
+
+  // Create a completed project with a review
+  if (cust1 && amit) {
+    const completedProject = await prisma.project.create({
+      data: {
+        customerId: cust1.id,
+        title: "Kitchen Remodeling - Modular Kitchen",
+        description: "Complete kitchen remodeling with modular cabinets, granite countertops, and new flooring.",
+        category: "renovation",
+        status: "COMPLETED",
+        budgetMin: 200000,
+        budgetMax: 350000,
+        location: "Bandra, Mumbai",
+        propertyType: "Apartment",
+        propertySize: 150,
+        awardedTo: amit.id,
+      },
+    });
+
+    await prisma.review.create({
+      data: {
+        projectId: completedProject.id,
+        customerId: cust1.id,
+        contractorId: amit.id,
+        rating: 5,
+        title: "Excellent work! Highly recommend",
+        comment: "Amit did an amazing job with our kitchen. The quality of work was exceptional and he completed the project on time. Would definitely hire again.",
+      },
+    });
+    console.log("Created completed project with review");
+  }
+
   console.log("\n✓ Seeding complete!");
   console.log("\nTest accounts:");
   console.log("  Admin:      admin@buildconnect.in / password123");

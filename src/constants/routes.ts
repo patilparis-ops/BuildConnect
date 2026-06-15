@@ -14,6 +14,8 @@ export const PUBLIC_ROUTES = {
   REGISTER_CONTRACTOR: "/register/contractor",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
+  PRIVACY_POLICY: "/privacy-policy",
+  TERMS_OF_SERVICE: "/terms-of-service",
 } as const;
 
 // ==================== Auth Routes ====================

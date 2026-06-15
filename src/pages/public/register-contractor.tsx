@@ -236,9 +236,9 @@ export default function RegisterContractorPage() {
 
         <p className="text-xs text-slate-500">
           By signing up, you agree to our{" "}
-          <a href="#" className="text-brand-600 hover:underline">Terms of Service</a>{" "}
+          <Link to={ROUTES.TERMS_OF_SERVICE} className="text-brand-600 hover:underline">Terms of Service</Link>{" "}
           and{" "}
-          <a href="#" className="text-brand-600 hover:underline">Privacy Policy</a>
+          <Link to={ROUTES.PRIVACY_POLICY} className="text-brand-600 hover:underline">Privacy Policy</Link>
         </p>
 
         <Button type="submit" fullWidth loading={registerMutation.isPending} variant="secondary">
