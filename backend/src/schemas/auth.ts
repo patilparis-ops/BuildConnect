@@ -62,3 +62,29 @@ export const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, "Current password is required"),
   newPassword: z.string().min(8, "New password must be at least 8 characters"),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Token is required"),
+  newPassword: z.string().min(8, "New password must be at least 8 characters"),
+});
+
+export const portfolioItemSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  images: z.array(z.string()).optional(),
+  category: z.string().min(1, "Category is required"),
+  completedAt: z.string().min(1, "Completion date is required"),
+  location: z.string().optional(),
+});
+
+export const certificationSchema = z.object({
+  name: z.string().min(1, "Certification name is required"),
+  issuer: z.string().min(1, "Issuer is required"),
+  issueDate: z.string().min(1, "Issue date is required"),
+  expiryDate: z.string().optional(),
+  documentUrl: z.string().optional(),
+});

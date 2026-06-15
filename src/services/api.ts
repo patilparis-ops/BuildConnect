@@ -251,3 +251,81 @@ export const platformApi = {
   getFAQ: async () => faqData,
   getTeam: async () => teamMembers,
 };
+
+// ==================== Auth Extras (Forgot/Reset Password) ====================
+
+export const authExtraApi = {
+  forgotPassword: async (data: { email: string }) => {
+    return request<{ success: boolean; message: string; resetToken?: string }>("/api/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  resetPassword: async (data: { token: string; newPassword: string }) => {
+    return request<{ success: boolean; message: string }>("/api/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+};
+
+// ==================== Portfolio API ====================
+
+export const portfolioApi = {
+  list: async () => {
+    return request<{ projects: any[] }>("/api/contractors/portfolio/list");
+  },
+
+  create: async (data: { title: string; description: string; images?: string[]; category: string; completedAt: string; location?: string }) => {
+    return request<any>("/api/contractors/portfolio", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  update: async (id: string, data: Partial<{ title: string; description: string; images: string[]; category: string; completedAt: string; location: string }>) => {
+    return request<any>(`/api/contractors/portfolio/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  delete: async (id: string) => {
+    return request<{ success: boolean }>(`/api/contractors/portfolio/${id}`, { method: "DELETE" });
+  },
+};
+
+// ==================== Earnings API ====================
+
+export const earningsApi = {
+  get: async () => {
+    return request<{ monthlyData: number[]; totalEarnings: number; transactions: any[] }>("/api/contractors/earnings");
+  },
+};
+
+// ==================== Certifications API ====================
+
+export const certificationsApi = {
+  list: async () => {
+    return request<{ certifications: any[] }>("/api/contractors/certifications/list");
+  },
+
+  create: async (data: { name: string; issuer: string; issueDate: string; expiryDate?: string; documentUrl?: string }) => {
+    return request<any>("/api/contractors/certifications", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  update: async (id: string, data: Partial<{ name: string; issuer: string; issueDate: string; expiryDate: string; documentUrl: string }>) => {
+    return request<any>(`/api/contractors/certifications/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  delete: async (id: string) => {
+    return request<{ success: boolean }>(`/api/contractors/certifications/${id}`, { method: "DELETE" });
+  },
+};

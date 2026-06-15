@@ -20,6 +20,7 @@ import LoginPage from "@/pages/public/login";
 import RegisterCustomerPage from "@/pages/public/register-customer";
 import RegisterContractorPage from "@/pages/public/register-contractor";
 import ForgotPasswordPage from "@/pages/public/forgot-password";
+import ResetPasswordPage from "@/pages/public/reset-password";
 
 // Dashboard Pages
 import CustomerDashboardPage from "@/pages/customer/dashboard";
@@ -71,6 +72,7 @@ export const router = createBrowserRouter([
       { path: "register/customer", element: <RegisterCustomerPage /> },
       { path: "register/contractor", element: <RegisterContractorPage /> },
       { path: "forgot-password", element: <ForgotPasswordPage /> },
+      { path: "reset-password", element: <ResetPasswordPage /> },
     ],
   },
 

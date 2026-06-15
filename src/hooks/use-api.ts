@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { projectsApi, contractorsApi, quotationsApi, reviewsApi, notificationsApi, adminApi, authApi } from "@/services/api";
+import { projectsApi, contractorsApi, quotationsApi, reviewsApi, notificationsApi, adminApi, authApi, authExtraApi, portfolioApi, earningsApi, certificationsApi } from "@/services/api";
 import { useAuthStore } from "@/store/auth-store";
 import { useNotificationStore } from "@/store/notification-store";
 import { toast } from "@/components/ui/toast";
@@ -246,30 +246,62 @@ export function useAdminPayments() {
   return safeQuery(["admin-payments"], () => adminApi.getDashboard(), { transactions: mockTransactions });
 }
 
-const mockPortfolio = [
-  { id: "1", title: "Modern Villa Renovation", description: "Complete renovation of a 4-bedroom villa with modern finishes.", category: "Renovation", images: 8, completedAt: "2025-12", location: "Mumbai", rating: 5 },
-  { id: "2", title: "Office Interior Design", description: "Contemporary office design for a tech startup.", category: "Interior Design", images: 12, completedAt: "2025-09", location: "Pune", rating: 5 },
-];
-
 export function usePortfolio() {
-  return safeQuery(["portfolio"], async () => ({ projects: mockPortfolio }), { projects: mockPortfolio });
+  return safeQuery(["portfolio"], () => portfolioApi.list(), { projects: [] });
 }
 
-const mockEarningsData = [25000, 42000, 38000, 55000, 48000, 62000, 71000, 58000, 45000];
-const mockEarningTransactions = [
-  { id: "t1", project: "Home Renovation", amount: 65000, status: "completed", date: "2026-06-10", type: "credit" },
-  { id: "t2", project: "Office Interior", amount: 120000, status: "completed", date: "2026-05-28", type: "credit" },
-  { id: "t3", project: "Platform Fee", amount: -6500, status: "completed", date: "2026-06-10", type: "debit" },
-];
+export function useCreatePortfolioItem() {
+  return useSafeMutation({ mutationFn: portfolioApi.create, invalidateKeys: [["portfolio"]], successMsg: "Portfolio item added!" });
+}
+
+export function useUpdatePortfolioItem() {
+  return useSafeMutation({ mutationFn: (vars: any) => portfolioApi.update(vars.id, vars.data), invalidateKeys: [["portfolio"]], successMsg: "Portfolio item updated" });
+}
+
+export function useDeletePortfolioItem() {
+  return useSafeMutation({ mutationFn: portfolioApi.delete, invalidateKeys: [["portfolio"]], successMsg: "Portfolio item removed" });
+}
 
 export function useEarnings() {
-  return safeQuery(["earnings"], async () => ({
-    monthlyData: mockEarningsData,
-    transactions: mockEarningTransactions,
-    totalEarnings: mockEarningsData.reduce((a, b) => a + b, 0),
-  }), {
-    monthlyData: mockEarningsData,
-    transactions: mockEarningTransactions,
-    totalEarnings: mockEarningsData.reduce((a, b) => a + b, 0),
+  return safeQuery(["earnings"], () => earningsApi.get(), {
+    monthlyData: [25000, 42000, 38000, 55000, 48000, 62000, 71000, 58000, 45000],
+    transactions: [],
+    totalEarnings: 0,
+  });
+}
+
+// ==================== Certifications ====================
+
+export function useCertifications() {
+  return safeQuery(["certifications"], () => certificationsApi.list(), { certifications: [] });
+}
+
+export function useCreateCertification() {
+  return useSafeMutation({ mutationFn: certificationsApi.create, invalidateKeys: [["certifications"]], successMsg: "Certification added!" });
+}
+
+export function useUpdateCertification() {
+  return useSafeMutation({ mutationFn: (vars: any) => certificationsApi.update(vars.id, vars.data), invalidateKeys: [["certifications"]], successMsg: "Certification updated" });
+}
+
+export function useDeleteCertification() {
+  return useSafeMutation({ mutationFn: certificationsApi.delete, invalidateKeys: [["certifications"]], successMsg: "Certification removed" });
+}
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: authExtraApi.forgotPassword,
+    onSuccess: (_data: any) => {
+      toast({ title: "Reset link sent!", message: "Check your email for instructions", variant: "success" });
+    },
+    onError: () => toast({ title: "Failed to send reset link", variant: "error" }),
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: authExtraApi.resetPassword,
+    onSuccess: () => toast({ title: "Password reset!", message: "You can now log in with your new password", variant: "success" }),
+    onError: (err: any) => toast({ title: "Reset failed", message: err.message, variant: "error" }),
   });
 }

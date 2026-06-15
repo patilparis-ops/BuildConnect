@@ -25,6 +25,7 @@ model User {
   contractor    Contractor?
   admin         Admin?
   notifications Notification[]
+  passwordResetTokens PasswordResetToken[]
 
   @@map("users")
 }
@@ -183,6 +184,21 @@ model Certification {
   contractor Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
 
   @@map("certifications")
+}
+
+// ==================== Password Reset Token Model ====================
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiry    DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([tokenHash])
+  @@map("password_reset_tokens")
 }
 
 // ==================== Notification Model ====================

@@ -1,11 +1,14 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { z } from "zod";
 import { prisma } from "../config/database.js";
 import { requireAuth } from "../middleware/auth.js";
+import { sendEmail, buildPasswordResetEmail } from "../services/email.js";
 import {
   registerCustomerSchema, registerContractorSchema,
   loginSchema, updateProfileSchema, changePasswordSchema,
+  forgotPasswordSchema, resetPasswordSchema,
 } from "../schemas/auth.js";
 
 const router = Router();
@@ -215,6 +218,102 @@ router.put("/change-password", requireAuth, async (req, res) => {
     if (err instanceof z.ZodError) { res.status(400).json({ error: "Validation failed", details: err.errors }); return; }
     console.error("Change password error:", err);
     res.status(500).json({ error: "Failed to change password" });
+  }
+});
+
+// POST /api/auth/forgot-password - Request password reset (public)
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const data = forgotPasswordSchema.parse(req.body);
+    const user = await prisma.user.findUnique({ where: { email: data.email } });
+    // Always return success to prevent user enumeration
+    if (!user) {
+      console.log(`[forgot-password] No user found for ${data.email}`);
+      res.json({ success: true, message: "If the email exists, a reset link has been sent." });
+      return;
+    }
+
+    // Generate a random token
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+
+    // Delete any existing tokens for this user
+    await prisma.passwordResetToken.deleteMany({ where: { userId: user.id } });
+
+    // Store hashed token with 30 min expiry
+    await prisma.passwordResetToken.create({
+      data: {
+        tokenHash,
+        userId: user.id,
+        expiry: new Date(Date.now() + 30 * 60 * 1000),
+      },
+    });
+
+    // Send the reset email (or log to console if no email service configured)
+    const emailContent = buildPasswordResetEmail(rawToken);
+    await sendEmail({ to: data.email, ...emailContent });
+
+    console.log(`[forgot-password] Reset token for ${data.email}: ${rawToken}`);
+
+    res.json({
+      success: true,
+      message: "If the email exists, a reset link has been sent.",
+      // In development, return the raw token so it can be used directly
+      ...(process.env.NODE_ENV !== "production" && { resetToken: rawToken }),
+    });
+  } catch (err: unknown) {
+    if (err instanceof z.ZodError) { res.status(400).json({ error: "Validation failed", details: err.errors }); return; }
+    console.error("Forgot password error:", err);
+    res.status(500).json({ error: "Failed to process request" });
+  }
+});
+
+// POST /api/auth/reset-password - Reset password with token (public)
+router.post("/reset-password", async (req, res) => {
+  try {
+    const data = resetPasswordSchema.parse(req.body);
+    const tokenHash = crypto.createHash("sha256").update(data.token).digest("hex");
+
+    const resetRecord = await prisma.passwordResetToken.findUnique({
+      where: { tokenHash },
+      include: { user: true },
+    });
+
+    if (!resetRecord) {
+      res.status(400).json({ error: "Invalid or expired reset token" });
+      return;
+    }
+
+    if (new Date() > resetRecord.expiry) {
+      await prisma.passwordResetToken.delete({ where: { id: resetRecord.id } });
+      res.status(400).json({ error: "Reset token has expired" });
+      return;
+    }
+
+    if (resetRecord.used) {
+      res.status(400).json({ error: "Reset token has already been used" });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(data.newPassword, 12);
+
+    // Use a transaction to update password + mark token as used
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: resetRecord.userId },
+        data: { password: hashedPassword },
+      }),
+      prisma.passwordResetToken.update({
+        where: { id: resetRecord.id },
+        data: { used: true },
+      }),
+    ]);
+
+    res.json({ success: true, message: "Password has been reset successfully" });
+  } catch (err: unknown) {
+    if (err instanceof z.ZodError) { res.status(400).json({ error: "Validation failed", details: err.errors }); return; }
+    console.error("Reset password error:", err);
+    res.status(500).json({ error: "Failed to reset password" });
   }
 });
 
