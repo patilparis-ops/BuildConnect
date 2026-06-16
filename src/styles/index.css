@@ -480,9 +480,5 @@
     background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
     background-size: 24px 24px;
   }
-
-  /* ==================== Premium Hover Group Effects ==================== */
-  .group-hover\:show-on-hover {
-    @apply opacity-0 group-hover:opacity-100 transition-opacity duration-200;
-  }
+}
 
