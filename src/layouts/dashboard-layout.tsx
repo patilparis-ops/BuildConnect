@@ -1,17 +1,18 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/cn";
 import { Sidebar } from "@/components/shared/sidebar";
 import { useUIStore } from "@/store/ui-store";
 import { useAuthStore } from "@/store/auth-store";
 import { Avatar } from "@/components/ui/avatar";
 import { Bell, Menu, ChevronDown, Building2 } from "lucide-react";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function DashboardLayout() {
   const { sidebarOpen, setMobileMenuOpen } = useUIStore();
   const { user, logout } = useAuthStore();
   const [profileOpen, setProfileOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -111,9 +112,25 @@ export function DashboardLayout() {
           </div>
         </header>
 
-        {/* Page content */}
+        {/* Page content with animated transitions */}
         <main className="p-4 lg:p-6">
-          <Outlet />
+            <Suspense fallback={
+              <div className="flex items-center justify-center py-32">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-600 border-t-transparent" />
+              </div>
+            }>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={location.pathname}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                >
+                  <Outlet />
+                </motion.div>
+              </AnimatePresence>
+            </Suspense>
         </main>
       </div>
     </div>

@@ -11,7 +11,7 @@ import { PlusCircle, Images, Edit3, Trash2, MapPin, Calendar, Star, Loader2 } fr
 import { useForm } from "react-hook-form";
 import { ErrorBanner } from "@/components/shared/error-banner";
 import { usePortfolio, useCreatePortfolioItem, useUpdatePortfolioItem, useDeletePortfolioItem } from "@/hooks/use-api";
-import { EmptyState } from "@/components/shared/empty-state";
+import { EmptyState } from "@/components/shared/empty-states";
 import { PageSkeleton } from "@/components/shared/skeleton-loaders";
 
 interface FormData {

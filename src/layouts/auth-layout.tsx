@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Building2 } from "lucide-react";
 
@@ -19,7 +20,13 @@ export function AuthLayout() {
       {/* Content */}
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-md">
-          <Outlet />
+          <Suspense fallback={
+            <div className="flex items-center justify-center py-20">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-600 border-t-transparent" />
+            </div>
+          }>
+            <Outlet />
+          </Suspense>
         </div>
       </div>
 
@@ -32,3 +39,4 @@ export function AuthLayout() {
     </div>
   );
 }
+

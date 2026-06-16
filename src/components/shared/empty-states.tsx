@@ -11,6 +11,7 @@ import {
   Zap,
 } from "lucide-react";
 import { ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 interface EmptyStateProps {
   icon: ReactNode;
@@ -18,6 +19,9 @@ interface EmptyStateProps {
   description: string;
   actionLabel?: string;
   onAction?: () => void;
+  actionText?: string;
+  actionHref?: string;
+  onActionClick?: () => void;
   variant?: "default" | "secondary" | "minimal";
 }
 
@@ -27,6 +31,9 @@ export function EmptyState({
   description,
   actionLabel,
   onAction,
+  actionText,
+  actionHref,
+  onActionClick,
   variant = "default",
 }: EmptyStateProps) {
   const containerClass = {
@@ -34,6 +41,10 @@ export function EmptyState({
     secondary: "py-12 px-4 text-center",
     minimal: "py-8 px-4 text-center",
   }[variant];
+
+  // Unified: prefer actionLabel/onAction (new), fall back to actionText/actionHref/onActionClick (old)
+  const showAction = ((actionLabel && onAction) || (actionText && (actionHref || onActionClick)));
+  const actionBtnLabel = actionLabel || actionText || "";
 
   return (
     <motion.div
@@ -53,14 +64,22 @@ export function EmptyState({
       </div>
       <h3 className="text-lg font-bold text-slate-900 mt-4">{title}</h3>
       <p className="text-slate-500 text-sm mt-1.5 max-w-sm mx-auto">{description}</p>
-      {actionLabel && onAction && (
-        <Button
-          onClick={onAction}
-          className="mt-5 font-semibold"
-          size="sm"
-        >
-          {actionLabel}
-        </Button>
+      {showAction && (
+        <div className="mt-5">
+          {actionHref ? (
+            <Link to={actionHref}>
+              <Button className="font-semibold" size="sm">{actionBtnLabel}</Button>
+            </Link>
+          ) : (
+            <Button
+              onClick={onAction || onActionClick}
+              className="mt-5 font-semibold"
+              size="sm"
+            >
+              {actionBtnLabel}
+            </Button>
+          )}
+        </div>
       )}
     </motion.div>
   );
@@ -73,7 +92,7 @@ export function NoProjectsEmpty() {
       icon={<Briefcase className="h-6 w-6" />}
       title="No projects yet"
       description="Post a new project to get started and connect with skilled contractors"
-      actionLabel="Post a Project"
+      variant="secondary"
     />
   );
 }

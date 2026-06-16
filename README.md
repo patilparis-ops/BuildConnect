@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# BuildConnect
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Your Vision, Built by the Best — India's premium construction marketplace connecting homeowners with verified contractors.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+# Install dependencies
+npm install
 
-## React Compiler
+# Start the development server
+npm run dev
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Build for production
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Testing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Unit Tests (Vitest)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Unit tests are located alongside components in `__tests__` directories. They use [Vitest](https://vitest.dev/) with React Testing Library.
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
 ```
+
+### End-to-End Tests (Playwright)
+
+E2E tests are in the `e2e/` directory. They use [Playwright](https://playwright.dev/) to verify the app in a real browser.
+
+```bash
+# Run all E2E tests
+npx playwright test
+
+# Run with UI mode (interactive)
+npx playwright test --ui
+
+# View the HTML report
+npx playwright show-report
+```
+
+The E2E tests are configured to automatically start the Vite dev server before running.
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 19, TypeScript 6 |
+| Build | Vite 8, Rolldown |
+| Styling | Tailwind CSS 4 |
+| Routing | React Router v7 |
+| State | Zustand + TanStack Query |
+| Animations | Framer Motion 12 |
+| Forms | React Hook Form + Zod |
+| UI Icons | Lucide React |
+| Unit Tests | Vitest + Testing Library |
+| E2E Tests | Playwright |

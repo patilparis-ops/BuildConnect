@@ -578,8 +578,8 @@ export default function HomePage() {
 
           <motion.div className="max-w-3xl mx-auto space-y-3" {...fadeInProps}>
             {faqData.slice(0, 2).flatMap((cat) =>
-              cat.questions.slice(0, 2).map((faq, i) => (
-                <details key={i} className="group bg-white rounded-xl border border-slate-200/70 overflow-hidden hover:border-slate-300/80 transition-all duration-200">
+              cat.questions.slice(0, 2).map((faq) => (
+                <details key={faq.q} className="group bg-white rounded-xl border border-slate-200/70 overflow-hidden hover:border-slate-300/80 transition-all duration-200">
                   <summary className="flex items-center justify-between p-5 cursor-pointer text-sm font-semibold text-slate-900 hover:bg-slate-50/50 transition-colors select-none">
                     <span>{faq.q}</span>
                     <ChevronRight className="h-4 w-4 text-slate-400 group-open:rotate-90 transition-transform duration-300 shrink-0 ml-4" />

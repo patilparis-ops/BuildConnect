@@ -1,51 +1,52 @@
+import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { PublicLayout } from "@/layouts/public-layout";
 import { AuthLayout } from "@/layouts/auth-layout";
 import { DashboardLayout } from "@/layouts/dashboard-layout";
 import { AuthGuard, RoleGuard } from "./guards";
 
-// ==================== Lazy Loaded Pages ====================
+// ==================== Lazy Loaded Pages (code-split by route) ====================
 
 // Public pages
-import HomePage from "@/pages/public/home";
-import AboutPage from "@/pages/public/about";
-import HowItWorksPage from "@/pages/public/how-it-works";
-import ContactPage from "@/pages/public/contact";
-import FAQPage from "@/pages/public/faq";
-import ContractorsPage from "@/pages/public/contractors";
-import ContractorDetailPage from "@/pages/public/contractor-detail";
-import PublicProjectsPage from "@/pages/public/projects";
-import ProjectDetailPage from "@/pages/public/project-detail";
-import LoginPage from "@/pages/public/login";
-import RegisterCustomerPage from "@/pages/public/register-customer";
-import RegisterContractorPage from "@/pages/public/register-contractor";
-import ForgotPasswordPage from "@/pages/public/forgot-password";
-import ResetPasswordPage from "@/pages/public/reset-password";
-import PrivacyPolicyPage from "@/pages/public/privacy-policy";
-import TermsOfServicePage from "@/pages/public/terms-of-service";
+const HomePage = lazy(() => import("@/pages/public/home"));
+const AboutPage = lazy(() => import("@/pages/public/about"));
+const HowItWorksPage = lazy(() => import("@/pages/public/how-it-works"));
+const ContactPage = lazy(() => import("@/pages/public/contact"));
+const FAQPage = lazy(() => import("@/pages/public/faq"));
+const ContractorsPage = lazy(() => import("@/pages/public/contractors"));
+const ContractorDetailPage = lazy(() => import("@/pages/public/contractor-detail"));
+const PublicProjectsPage = lazy(() => import("@/pages/public/projects"));
+const ProjectDetailPage = lazy(() => import("@/pages/public/project-detail"));
+const LoginPage = lazy(() => import("@/pages/public/login"));
+const RegisterCustomerPage = lazy(() => import("@/pages/public/register-customer"));
+const RegisterContractorPage = lazy(() => import("@/pages/public/register-contractor"));
+const ForgotPasswordPage = lazy(() => import("@/pages/public/forgot-password"));
+const ResetPasswordPage = lazy(() => import("@/pages/public/reset-password"));
+const PrivacyPolicyPage = lazy(() => import("@/pages/public/privacy-policy"));
+const TermsOfServicePage = lazy(() => import("@/pages/public/terms-of-service"));
 
 // Dashboard Pages
-import CustomerDashboardPage from "@/pages/customer/dashboard";
-import CustomerProjectsPage from "@/pages/customer/projects";
-import CustomerPostProjectPage from "@/pages/customer/post-project";
-import CustomerQuotationsPage from "@/pages/customer/quotations";
-import CustomerReviewsPage from "@/pages/customer/reviews";
-import CustomerHiredContractorsPage from "@/pages/customer/hired-contractors";
-import ContractorDashboardPage from "@/pages/contractor/dashboard";
-import ContractorProjectsPage from "@/pages/contractor/projects";
-import ContractorQuotesPage from "@/pages/contractor/quotes";
-import ContractorPortfolioPage from "@/pages/contractor/portfolio";
-import ContractorEarningsPage from "@/pages/contractor/earnings";
-import ContractorSubmitQuotePage from "@/pages/contractor/submit-quote";
-import ContractorReviewsPage from "@/pages/contractor/reviews";
-import AdminDashboardPage from "@/pages/admin/dashboard";
-import AdminUsersPage from "@/pages/admin/users";
-import AdminVerificationPage from "@/pages/admin/verification";
-import AdminPaymentsPage from "@/pages/admin/payments";
-import AdminAnalyticsPage from "@/pages/admin/analytics";
-import AdminAllProjectsPage from "@/pages/admin/all-projects";
-import NotificationsPage from "@/pages/shared/notifications";
-import SettingsPage from "@/pages/shared/settings";
+const CustomerDashboardPage = lazy(() => import("@/pages/customer/dashboard"));
+const CustomerProjectsPage = lazy(() => import("@/pages/customer/projects"));
+const CustomerPostProjectPage = lazy(() => import("@/pages/customer/post-project"));
+const CustomerQuotationsPage = lazy(() => import("@/pages/customer/quotations"));
+const CustomerReviewsPage = lazy(() => import("@/pages/customer/reviews"));
+const CustomerHiredContractorsPage = lazy(() => import("@/pages/customer/hired-contractors"));
+const ContractorDashboardPage = lazy(() => import("@/pages/contractor/dashboard"));
+const ContractorProjectsPage = lazy(() => import("@/pages/contractor/projects"));
+const ContractorQuotesPage = lazy(() => import("@/pages/contractor/quotes"));
+const ContractorPortfolioPage = lazy(() => import("@/pages/contractor/portfolio"));
+const ContractorEarningsPage = lazy(() => import("@/pages/contractor/earnings"));
+const ContractorSubmitQuotePage = lazy(() => import("@/pages/contractor/submit-quote"));
+const ContractorReviewsPage = lazy(() => import("@/pages/contractor/reviews"));
+const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard"));
+const AdminUsersPage = lazy(() => import("@/pages/admin/users"));
+const AdminVerificationPage = lazy(() => import("@/pages/admin/verification"));
+const AdminPaymentsPage = lazy(() => import("@/pages/admin/payments"));
+const AdminAnalyticsPage = lazy(() => import("@/pages/admin/analytics"));
+const AdminAllProjectsPage = lazy(() => import("@/pages/admin/all-projects"));
+const NotificationsPage = lazy(() => import("@/pages/shared/notifications"));
+const SettingsPage = lazy(() => import("@/pages/shared/settings"));
 
 // ==================== Router ====================
 export const router = createBrowserRouter([
