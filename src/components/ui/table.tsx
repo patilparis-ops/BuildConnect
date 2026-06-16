@@ -47,7 +47,7 @@ const TableRow = forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-slate-200 transition-colors hover:bg-slate-50/50",
+      "border-b border-slate-200/60 transition-all duration-200 hover:bg-slate-50/80",
       className
     )}
     {...props}
@@ -84,8 +84,8 @@ const TableHead = forwardRef<
     <th
       ref={ref}
       className={cn(
-        "h-12 px-4 text-left align-middle text-xs font-semibold uppercase tracking-wider text-slate-500",
-        sortable && "cursor-pointer select-none hover:text-slate-700",
+        "h-12 px-4 text-left align-middle text-xs font-bold uppercase tracking-wider text-slate-500",
+        sortable && "cursor-pointer select-none hover:text-slate-700 hover:bg-slate-50/50",
         className
       )}
       onClick={sortable ? onSort : undefined}

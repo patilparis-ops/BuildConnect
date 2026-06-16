@@ -25,7 +25,7 @@ export function DashboardLayout() {
         )}
       >
         {/* Top bar */}
-        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-200/60">
           <div className="flex items-center justify-between h-16 px-4 lg:px-6">
             {/* Left */}
             <div className="flex items-center gap-3">
@@ -43,31 +43,31 @@ export function DashboardLayout() {
             </div>
 
             {/* Right */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3.5">
               {/* Notifications */}
               <button className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors">
                 <Bell className="h-5 w-5" />
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-danger-500" />
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-danger-500 animate-pulse" />
               </button>
 
               {/* Profile */}
               <div className="relative">
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-slate-100 transition-colors"
+                  className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white p-1 pr-3.5 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 shadow-xs"
                 >
                   <Avatar
                     src={user?.avatar}
                     fallback={user ? `${user.firstName[0]}${user.lastName[0]}` : "U"}
                     size="sm"
+                    className="h-7 w-7 rounded-full"
                   />
-                  <div className="hidden md:block text-left">
-                    <p className="text-sm font-medium text-slate-900 leading-tight">
+                  <div className="hidden md:block text-left text-xs">
+                    <p className="font-semibold text-slate-900 leading-tight">
                       {user?.firstName} {user?.lastName}
                     </p>
-                    <p className="text-xs text-slate-500 capitalize">{user?.role}</p>
                   </div>
-                  <ChevronDown className="hidden md:block h-4 w-4 text-slate-400" />
+                  <ChevronDown className="hidden md:block h-3.5 w-3.5 text-slate-400 ml-0.5" />
                 </button>
 
                 <AnimatePresence>

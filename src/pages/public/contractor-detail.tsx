@@ -12,6 +12,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { useContractor, useContractorReviews, useProjects } from "@/hooks/use-api";
 import { ErrorBanner } from "@/components/shared/error-banner";
 import { Star, MapPin, Shield, Briefcase, Clock, Award, CheckCircle2, ChevronLeft, Mail, Building2, HardHat, Quote, Send, Phone, IndianRupee } from "lucide-react";
+import { NoReviewsEmpty } from "@/components/shared/empty-states";
 import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -271,9 +272,8 @@ export default function ContractorDetailPage() {
               </div>
             </div>
             {reviews.length === 0 ? (
-              <div className="text-center py-12 bg-slate-50 rounded-2xl">
-                <Star className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-500">No reviews yet.</p>
+              <div className="bg-slate-50 rounded-2xl">
+                <NoReviewsEmpty />
               </div>
             ) : (
               reviews.map((review, i) => (

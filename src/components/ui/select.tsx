@@ -31,10 +31,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           <select
             id={selectId}
             className={cn(
-              "flex h-10 w-full appearance-none rounded-lg border border-slate-300 bg-white px-3 py-2 pr-10 text-sm text-slate-900 transition-colors duration-200",
+              "flex h-10 w-full appearance-none rounded-lg border border-slate-300/70 bg-white px-3 py-2 pr-10 text-sm text-slate-900 transition-all duration-200",
               "hover:border-slate-400",
-              "focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none",
-              "disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500",
+              "focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20 focus:outline-none",
+              "disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400",
               error &&
                 "border-danger-400 focus:border-danger-500 focus:ring-danger-500/20",
               className

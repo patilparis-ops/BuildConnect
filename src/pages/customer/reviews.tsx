@@ -8,6 +8,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { useMyReviews, useProjects, useContractors } from "@/hooks/use-api";
 import { ErrorBanner } from "@/components/shared/error-banner";
 import { Star, Calendar } from "lucide-react";
+import { NoReviewsEmpty } from "@/components/shared/empty-states";
 
 const fadeInUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.4 } };
 
@@ -90,10 +91,8 @@ export default function CustomerReviewsPage() {
 
       <div className="grid gap-4">
         {filtered.length === 0 ? (
-          <Card><CardContent className="p-12 text-center">
-            <Star className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-            <h3 className="text-sm font-medium text-slate-900">No reviews yet</h3>
-            <p className="text-sm text-slate-500 mt-1">Reviews you write for completed projects will appear here</p>
+          <Card><CardContent className="py-8">
+            <NoReviewsEmpty />
           </CardContent></Card>
         ) : (
           filtered.map((review, i) => (

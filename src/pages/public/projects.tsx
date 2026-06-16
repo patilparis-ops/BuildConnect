@@ -8,7 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBanner } from "@/components/shared/error-banner";
 import { useProjects } from "@/hooks/use-api";
 import { PROJECT_CATEGORIES } from "@/constants";
-import { Search, MapPin, IndianRupee, Building2, Clock, SlidersHorizontal, HardHat, ArrowRight } from "lucide-react";
+import { Search, MapPin, IndianRupee, Building2, Clock, SlidersHorizontal, ArrowRight } from "lucide-react";
+import { NoSearchResultsEmpty } from "@/components/shared/empty-states";
 
 const fadeInUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.4 } };
 
@@ -133,11 +134,11 @@ export default function PublicProjectsPage() {
         <p className="text-sm text-slate-500">Showing <span className="font-medium">{filtered.length}</span> open projects</p>
 
         {filtered.length === 0 ? (
-          <div className="text-center py-20">
-            <HardHat className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-900 mb-1">No projects found</h3>
-            <p className="text-sm text-slate-500 mb-4">Try adjusting your search or filters</p>
-            <Button variant="outline" onClick={() => { setSearch(""); setCategory("all"); }}>Reset Filters</Button>
+          <div className="text-center py-16">
+            <NoSearchResultsEmpty />
+            <div className="mt-2">
+              <Button variant="outline" onClick={() => { setSearch(""); setCategory("all"); }}>Reset Filters</Button>
+            </div>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

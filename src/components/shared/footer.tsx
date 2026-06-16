@@ -41,21 +41,21 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-slate-900">
+    <footer className="border-t border-slate-200/60 bg-slate-900">
       <div className="container-page py-16">
         {/* Top grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Brand column */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2.5 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">
+          <div className="col-span-2 md:col-span-4 lg:col-span-4">
+            <Link to="/" className="flex items-center gap-2.5 mb-4 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
                 <Building2 className="h-5 w-5 text-white" />
               </div>
               <span className="text-lg font-bold text-white">
                 {APP_CONFIG.NAME}
               </span>
             </Link>
-            <p className="text-sm text-slate-400 leading-relaxed mb-6">
+            <p className="text-sm text-slate-400 leading-relaxed mb-6 max-w-sm">
               {APP_CONFIG.DESCRIPTION}
             </p>
             <div className="space-y-3">
@@ -80,8 +80,8 @@ export function Footer() {
 
           {/* Link columns */}
           {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
-              <h3 className="text-sm font-semibold text-white mb-4">
+            <div key={category} className="lg:col-span-2">
+              <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-4">
                 {category}
               </h3>
               <ul className="space-y-3">
@@ -89,10 +89,10 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       to={link.href}
-                      className="text-sm text-slate-400 hover:text-white transition-colors inline-flex items-center gap-1 group"
+                      className="text-sm text-slate-400 hover:text-white transition-all duration-200 inline-flex items-center gap-1 group"
                     >
                       {link.label}
-                      <ArrowUpRight className="h-3 w-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
+                      <ArrowUpRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-all duration-200" />
                     </Link>
                   </li>
                 ))}
@@ -102,18 +102,18 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500">
             &copy; {new Date().getFullYear()} {APP_CONFIG.NAME}. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-slate-500 hover:text-white transition-colors"
+                className="text-sm text-slate-500 hover:text-white transition-all duration-200"
                 aria-label={link.label}
               >
                 {link.label}

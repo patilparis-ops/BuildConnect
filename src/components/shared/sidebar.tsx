@@ -107,13 +107,13 @@ export function Sidebar() {
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "hidden lg:flex flex-col fixed left-0 top-0 h-full bg-white border-r border-slate-200 z-30 transition-all duration-300",
+          "hidden lg:flex flex-col fixed left-0 top-0 h-full bg-white border-r border-slate-200/60 z-30 transition-all duration-300",
           sidebarOpen ? "w-64" : "w-16"
         )}
       >
         {/* Logo */}
         <div className={cn(
-          "flex items-center h-16 border-b border-slate-200 px-4",
+          "flex items-center h-16 border-b border-slate-200/60 px-4",
           sidebarOpen ? "justify-between" : "justify-center"
         )}>
           {sidebarOpen ? (
@@ -126,7 +126,7 @@ export function Sidebar() {
               </Link>
               <button
                 onClick={toggleSidebar}
-                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-colors"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -143,7 +143,7 @@ export function Sidebar() {
         {/* Role header */}
         {sidebarOpen && (
           <div className={cn(
-            "mx-3 mt-3 mb-1 px-3 py-2 rounded-lg bg-gradient-to-r text-white text-xs font-medium",
+            "mx-3 mt-3 mb-1 px-3 py-2 rounded-lg bg-gradient-to-r text-white text-xs font-medium shadow-xs",
             config.gradient
           )}>
             <div className="flex items-center gap-1.5">
@@ -166,8 +166,8 @@ export function Sidebar() {
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                   sidebarOpen ? "" : "justify-center",
                   isActive
-                    ? "bg-brand-50 text-brand-700"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    ? "bg-brand-50/70 text-brand-700 font-semibold"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                 )}
                 title={link.label}
               >

@@ -9,7 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/store/auth-store";
 import { useMyProjects, useContractors } from "@/hooks/use-api";
 import { ErrorBanner } from "@/components/shared/error-banner";
-import { Star, MapPin, HardHat, Shield, ChevronRight } from "lucide-react";
+import { Star, MapPin, Shield, ChevronRight } from "lucide-react";
+import { NoHiredContractorsEmpty } from "@/components/shared/empty-states";
 import { ROUTES } from "@/constants/routes";
 
 const fadeInUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.4 } };
@@ -77,11 +78,11 @@ export default function CustomerHiredContractorsPage() {
       </div>
 
       {hired.length === 0 ? (
-        <Card><CardContent className="p-12 text-center">
-          <HardHat className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-sm font-medium text-slate-900">No contractors hired yet</h3>
-          <p className="text-sm text-slate-500 mt-1">Once you accept a quote and hire a contractor, they will appear here</p>
-          <Link to={ROUTES.CUSTOMER.POST_PROJECT}><Button variant="primary" size="sm" className="mt-4">Post a Project</Button></Link>
+        <Card><CardContent className="py-8">
+          <NoHiredContractorsEmpty />
+          <div className="text-center -mt-2">
+            <Link to={ROUTES.CUSTOMER.POST_PROJECT}><Button variant="primary" size="sm">Post a Project</Button></Link>
+          </div>
         </CardContent></Card>
       ) : (
         <div className="grid gap-4">

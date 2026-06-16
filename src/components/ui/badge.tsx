@@ -2,22 +2,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors duration-200",
+  "inline-flex items-center gap-1 rounded-full border font-semibold transition-all duration-200",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-slate-100 text-slate-700",
-        primary: "border-transparent bg-brand-100 text-brand-700",
-        secondary: "border-transparent bg-secondary-100 text-secondary-700",
-        success: "border-transparent bg-success-100 text-success-700",
-        warning: "border-transparent bg-warning-100 text-warning-700",
-        danger: "border-transparent bg-danger-100 text-danger-700",
-        outline: "border-slate-300 text-slate-600",
+        default: "border-slate-200/60 bg-slate-50 text-slate-700",
+        primary: "border-brand-200/50 bg-brand-50 text-brand-700",
+        secondary: "border-secondary-200/50 bg-secondary-50 text-secondary-700",
+        success: "border-success-200/50 bg-success-50 text-success-700",
+        warning: "border-warning-200/50 bg-warning-50 text-warning-700",
+        danger: "border-danger-200/50 bg-danger-50 text-danger-700",
+        outline: "border-slate-300/70 bg-white text-slate-600",
       },
       size: {
         sm: "px-2 py-0.5 text-[10px]",
-        md: "px-2.5 py-0.5 text-xs",
-        lg: "px-3 py-1 text-sm",
+        md: "px-3 py-1 text-xs",
+        lg: "px-3.5 py-1.5 text-sm",
       },
     },
     defaultVariants: {
