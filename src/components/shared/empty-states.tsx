@@ -10,7 +10,7 @@ import {
   HardHat,
   Zap,
 } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 interface EmptyStateProps {

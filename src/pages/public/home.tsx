@@ -58,7 +58,7 @@ const fadeInUpProps = {
   initial: "initial",
   whileInView: "animate",
   viewport: { once: true, margin: "-60px" },
-  transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
+  transition: { duration: 0.6, ease: "easeOut" as const },
 };
 
 const fadeInProps = {
@@ -79,7 +79,7 @@ const staggerContainerProps = {
 
 const staggerItemProps = {
   variants: staggerItemVariants,
-  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  transition: { duration: 0.5, ease: "easeOut" as const },
 };
 
 // ==================== Data ====================
@@ -181,7 +181,7 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.7, ease: "easeOut" as const }}
               className="lg:col-span-7 space-y-8"
             >
               <div className="inline-flex items-center gap-2.5 rounded-full border border-slate-700/50 bg-slate-900/60 backdrop-blur-sm px-4 py-2">
@@ -266,7 +266,7 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" as const }}
               className="lg:col-span-5 hidden lg:block"
             >
               <IsometricConstruction />
@@ -362,7 +362,7 @@ export default function HomePage() {
             key={activeTab}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.4, ease: "easeOut" as const }}
             className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
             {(activeTab === "homeowners" ? homeownerSteps : contractorSteps).map((step, index) => (

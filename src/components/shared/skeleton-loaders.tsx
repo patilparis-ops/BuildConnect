@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 // Pulse animation for skeleton loaders
-const pulseVariants = {
+const pulseVariants: Variants = {
   initial: { opacity: 0.6 },
   animate: {
     opacity: [0.6, 0.9, 0.6],

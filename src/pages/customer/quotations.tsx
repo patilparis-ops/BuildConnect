@@ -5,11 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ROUTES } from "@/constants/routes";
-import { useMyQuotes, useProjects } from "@/hooks/use-api";
-import { useAcceptQuote, useRejectQuote } from "@/hooks/use-api";
+import { useMyQuotes, useProjects, useAcceptQuote, useRejectQuote } from "@/hooks/use-api";
 import { STATUS_COLORS } from "@/constants";
 import { FileText, IndianRupee, Calendar, Clock, CheckCircle2, XCircle, Building2 } from "lucide-react";
 import { ErrorBanner } from "@/components/shared/error-banner";
+import type { Quotation } from "@/types";
 import { NoQuotesEmpty } from "@/components/shared/empty-states";
 import { PageSkeleton } from "@/components/shared/skeleton-loaders";
 import { cn } from "@/lib/cn";
@@ -96,7 +96,7 @@ export default function CustomerQuotationsPage() {
   const rejectQuote = useRejectQuote();
 
   const isLoading = ql || pl;
-  const quotations = quotesData?.quotations ?? [];
+  const quotations: Quotation[] = quotesData?.quotations ?? [];
   const projects = projectsData?.projects ?? [];
   const filtered = filter === "all" ? quotations : quotations.filter(q => q.status === filter);
 
